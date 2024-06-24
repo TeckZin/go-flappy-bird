@@ -37,6 +37,8 @@ func (g *Game) render() {
 			if g.bird.posX == pipe.posX {
 				if g.bird.posY <= pipe.topPipeY || g.bird.posY >= pipe.bottomPipeY {
 					g.gameEnd = true
+				} else {
+					g.points += 1
 				}
 			}
 			for i := pipe.topPipeY - 1; i > 0; i-- {

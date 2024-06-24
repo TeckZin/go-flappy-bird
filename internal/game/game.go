@@ -1,12 +1,14 @@
 package game
 
 import (
+	"fmt"
 	"time"
 )
 
 type Game struct {
 	height          int32
 	width           int32
+	points          int32
 	bird            *Bird
 	generateNewPipe bool
 	pipes           []*Pipe
@@ -22,6 +24,7 @@ func NewGame(height int32, width int32) *Game {
 	game.height = height
 	game.width = width
 	game.gameEnd = false
+	game.points = 0
 
 	game.pipes = make([]*Pipe, 0)
 	game.bird = bird
@@ -57,6 +60,7 @@ func (g *Game) Start(tick int32) {
 		counter++
 
 		if g.gameEnd {
+			fmt.Printf("you got: %v\n", g.points)
 			break
 		}
 	}
