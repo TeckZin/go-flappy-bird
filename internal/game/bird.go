@@ -7,7 +7,6 @@ import (
 type Bird struct {
 	posX      int32
 	posY      int32
-	estimateX float32
 	estimateY float32
 	deltaY    float32
 
@@ -16,23 +15,19 @@ type Bird struct {
 
 func (b *Bird) initBird() {
 	b.posX = 1
-	b.posY = 1
+	b.posY = 2
+	b.estimateY = float32(2)
 	b.deltaY = 0.1
 	b.time = time.Second
 
 }
 
-func (b *Bird) update(floorY int32) {
-	if b.posY >= floorY {
-		b.estimateY = float32(floorY - 1)
-	} else {
-		b.estimateY += b.deltaY
-		if b.deltaY < 0.30 {
-			b.deltaY += 0.01
-		}
+func (b *Bird) update() {
+	b.estimateY += b.deltaY
+	if b.deltaY < 0.30 {
+		b.deltaY += 0.01
 	}
 
-	b.posX = int32(b.estimateX)
 	b.posY = int32(b.estimateY)
 
 }

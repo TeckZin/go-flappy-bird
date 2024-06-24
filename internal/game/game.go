@@ -7,23 +7,24 @@ import (
 type Game struct {
 	height          int32
 	width           int32
-	bird            Bird
+	bird            *Bird
 	generateNewPipe bool
 	pipes           []*Pipe
 	pixels          [][]byte
+	gameEnd         bool
 }
 
 func NewGame(height int32, width int32) *Game {
 
 	bird := &Bird{}
 	bird.initBird()
-
 	game := &Game{}
 	game.height = height
 	game.width = width
+	game.gameEnd = false
 
 	game.pipes = make([]*Pipe, 0)
-	game.bird = *bird
+	game.bird = bird
 
 	game.pixels = make([][]byte, 0)
 
@@ -45,7 +46,6 @@ func (g *Game) Start(tick int32) {
 	for range ticker.C {
 
 		if counter == 80 {
-
 			counter = 0
 			g.generateNewPipe = true
 
@@ -56,12 +56,15 @@ func (g *Game) Start(tick int32) {
 		g.display()
 		counter++
 
+		if g.gameEnd {
+			break
+		}
 	}
 
 }
 
 func (g *Game) update() {
-	g.bird.update(40)
+	g.bird.update()
 
 	for idx, pipe := range g.pipes {
 		flag := pipe.update()

@@ -18,6 +18,7 @@ func (p *Pipe) initPipe(height int32, width int32) {
 	p.topPipeY = int32(randomInt)
 
 	p.estimateX = float32(width) - 1
+	p.posX = int32(width) - 1
 
 	p.bottomPipeY = int32(randomInt) + 5
 

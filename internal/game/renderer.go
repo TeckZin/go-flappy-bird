@@ -1,6 +1,8 @@
 package game
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func (g *Game) render() {
 	var i, j int32
@@ -22,20 +24,30 @@ func (g *Game) render() {
 		out = append(out, row)
 
 	}
+	if g.bird.posY >= g.height-1 || g.bird.posY <= 0 {
+		g.gameEnd = true
+	} else {
+		out[g.bird.posY][g.bird.posX] = byte('B')
+	}
 
-	out[g.bird.posY][g.bird.posX] = byte('B')
+	if len(g.pipes) != 0 {
+		for _, pipe := range g.pipes {
+			out[pipe.topPipeY][pipe.posX] = byte('T')
+			out[pipe.bottomPipeY][pipe.posX] = byte('D')
+			if g.bird.posX == pipe.posX {
+				if g.bird.posY <= pipe.topPipeY || g.bird.posY >= pipe.bottomPipeY {
+					g.gameEnd = true
+				}
+			}
+			for i := pipe.topPipeY - 1; i > 0; i-- {
+				out[i][pipe.posX] = byte('|')
+			}
 
-	for _, pipe := range g.pipes {
-		out[pipe.topPipeY][pipe.posX] = byte('T')
-		out[pipe.bottomPipeY][pipe.posX] = byte('D')
-
-		for i := pipe.topPipeY - 1; i > 0; i-- {
-			out[i][pipe.posX] = byte('|')
+			for i := pipe.bottomPipeY + 1; i < g.height-1; i++ {
+				out[i][pipe.posX] = byte('|')
+			}
 		}
 
-		for i := pipe.bottomPipeY + 1; i < g.height-1; i++ {
-			out[i][pipe.posX] = byte('|')
-		}
 	}
 
 	g.pixels = out
